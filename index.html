@@ -67,6 +67,21 @@
     button:active {
       opacity: 0.7;
     }
+    .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: white;
+  animation: blink 1s step-start infinite;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -104,9 +119,10 @@
     let expression = '';
 
     function updateDisplay() {
-      display.textContent = expression || '0';
-      display.scrollLeft = display.scrollWidth;
-    }
+  display.innerHTML = (expression || '0') + '<span class="cursor">|</span>';
+  display.scrollLeft = display.scrollWidth;
+}
+
 
     function append(char) {
       expression += char;
