@@ -2,39 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>iOS Style Calculator</title>
   <style>
     body {
+      margin: 0;
       background-color: #000;
-      color: white;
       font-family: 'Helvetica Neue', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
 
     .calculator {
-      background-color: #1c1c1c;
-      padding: 20px;
+      background: #1c1c1e;
       border-radius: 40px;
-      width: 360px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      padding: 20px;
+      width: 350px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
-    .display {
+    #display {
       width: 100%;
       height: 80px;
       font-size: 2.5rem;
-      text-align: right;
-      padding: 20px;
-      border: none;
-      background-color: transparent;
       color: white;
+      background: transparent;
+      border: none;
+      text-align: right;
+      padding: 10px;
       outline: none;
-      caret-color: white;
     }
 
     .grid {
@@ -45,17 +43,19 @@
     }
 
     button {
-      height: 70px;
-      border-radius: 35px;
-      font-size: 1.5rem;
       border: none;
+      border-radius: 50%;
+      height: 70px;
+      width: 70px;
+      font-size: 1.5rem;
       color: white;
       cursor: pointer;
     }
 
-    .number { background-color: #333; }
-    .operator { background-color: orange; }
-    .function { background-color: #a5a5a5; color: black; }
+    .number { background: #333; }
+    .operator { background: orange; }
+    .function { background: #a5a5a5; color: black; }
+    .zero { grid-column: span 2; border-radius: 35px; width: 100%; text-align: left; padding-left: 28px; }
 
     button:active {
       opacity: 0.7;
@@ -64,7 +64,7 @@
 </head>
 <body>
   <div class="calculator">
-    <input type="text" class="display" id="display" disabled />
+    <input type="text" id="display" disabled />
     <div class="grid">
       <button class="function" onclick="clearDisplay()">AC</button>
       <button class="function" onclick="backspace()">⌫</button>
@@ -86,47 +86,38 @@
       <button class="number" onclick="append('3')">3</button>
       <button class="operator" onclick="append('+')">+</button>
 
-      <button class="number" onclick="append('0')" style="grid-column: span 2;">0</button>
+      <button class="number zero" onclick="append('0')">0</button>
       <button class="number" onclick="append('.')">.</button>
       <button class="operator" onclick="calculate()">=</button>
     </div>
   </div>
 
   <script>
-    const display = document.getElementById('display');
+    let display = document.getElementById('display');
     let expression = '';
 
-    function playClick() {
-      const clickSound = new Audio('button-click(chosic.com).mp3');
-      audio.play();
-    }
-
     function append(char) {
-      playClick();
       expression += char;
       display.value = expression;
     }
 
     function clearDisplay() {
-      playClick();
       expression = '';
       display.value = '';
     }
 
     function backspace() {
-      playClick();
       expression = expression.slice(0, -1);
       display.value = expression;
     }
 
     function calculate() {
-      playClick();
       try {
         let result = eval(expression);
+        display.value = Number(result).toLocaleString('en-US');
         expression = result.toString();
-        display.value = Number(result).toLocaleString();
       } catch {
-        display.value = "Error";
+        display.value = 'Error';
         expression = '';
       }
     }
