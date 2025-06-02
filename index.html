@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=0.70"/>
+  <meta name="viewport" content="width=device-width, initial-scale=2.0"/>
   <title>iOS Calculator</title>
   <style>
     body {
@@ -170,6 +170,11 @@ function updateDisplay() {
         display.textContent = 'Error';
       }
     }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  }
   </script>
 </body>
 </html>
