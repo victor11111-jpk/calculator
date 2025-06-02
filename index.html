@@ -204,7 +204,7 @@
       <button data-num=".">.</button>
       <button class="operator" id="equals" data-op="=">=</button>
     </div>
-
+      <botton onclick="cancel()">C</botton>
     <!-- Memory Row (now at bottom) -->
     <div id="memory-row">
       <button id="mem-add" aria-label="Memory Add">M+</button>
@@ -221,7 +221,9 @@
       const memAddBtn = document.getElementById('mem-add');
       const memRecallBtn = document.getElementById('mem-recall');
       const memClearBtn = document.getElementById('mem-clear');
-
+    function cancel() {
+  display.value = display.value.slice(0, -1);
+}
       let current = '0';
       let previous = null;
       let operator = null;
