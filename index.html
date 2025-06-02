@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>iOS Style Calculator</title>
+  <title>iOS Calculator</title>
   <style>
     body {
       margin: 0;
@@ -19,12 +19,11 @@
       background: #1c1c1e;
       border-radius: 40px;
       padding: 20px;
-      width: 350px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      width: 360px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    #display {
-      width: 100%;
+    .display {
       height: 80px;
       font-size: 2.5rem;
       color: white;
@@ -32,6 +31,8 @@
       border: none;
       text-align: right;
       padding: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
       outline: none;
     }
 
@@ -55,7 +56,13 @@
     .number { background: #333; }
     .operator { background: orange; }
     .function { background: #a5a5a5; color: black; }
-    .zero { grid-column: span 2; border-radius: 35px; width: 100%; text-align: left; padding-left: 28px; }
+    .zero {
+      grid-column: span 2;
+      border-radius: 35px;
+      width: 100%;
+      text-align: left;
+      padding-left: 28px;
+    }
 
     button:active {
       opacity: 0.7;
@@ -64,7 +71,7 @@
 </head>
 <body>
   <div class="calculator">
-    <input type="text" id="display" disabled />
+    <div id="display" class="display">0</div>
     <div class="grid">
       <button class="function" onclick="clearDisplay()">AC</button>
       <button class="function" onclick="backspace()">⌫</button>
@@ -96,29 +103,34 @@
     let display = document.getElementById('display');
     let expression = '';
 
+    function updateDisplay() {
+      display.textContent = expression || '0';
+      display.scrollLeft = display.scrollWidth;
+    }
+
     function append(char) {
       expression += char;
-      display.value = expression;
+      updateDisplay();
     }
 
     function clearDisplay() {
       expression = '';
-      display.value = '';
+      updateDisplay();
     }
 
     function backspace() {
       expression = expression.slice(0, -1);
-      display.value = expression;
+      updateDisplay();
     }
 
     function calculate() {
       try {
         let result = eval(expression);
-        display.value = Number(result).toLocaleString('en-US');
         expression = result.toString();
+        updateDisplay();
       } catch {
-        display.value = 'Error';
         expression = '';
+        display.textContent = 'Error';
       }
     }
   </script>
