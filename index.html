@@ -12,7 +12,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 150vh;
     }
 
     .calculator {
@@ -30,7 +30,7 @@
       background: transparent;
       border: none;
       text-align: right;
-      padding: 10px;
+      padding: 15px;
       overflow-x: auto;
       white-space: nowrap;
       outline: none;
@@ -78,18 +78,16 @@
 
 @keyframes blink {
   50% {
-    opacity: 0;
+    opacity: 1;
   }
 }
 const clickSound = new Audio('button-click(chosic.com).mp3');
-clickSound.volume = 0.5;
+clickSound.volume = 1.5;
 
 function playClick() {
   clickSound.currentTime = 0;
   clickSound.play();
-}
-
-    
+}   
   </style>
 </head>
 <body>
