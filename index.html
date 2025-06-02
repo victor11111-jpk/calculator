@@ -119,9 +119,12 @@
     let expression = '';
 
     function updateDisplay() {
-  display.innerHTML = (expression || '0') + '<span class="cursor">|</span>';
+  // Remove existing cursor if present
+  let cleanExpression = expression.replace(/<span class="cursor">\|<\/span>/g, '');
+  display.innerHTML = (cleanExpression || '0') + '<span class="cursor">|</span>';
   display.scrollLeft = display.scrollWidth;
 }
+
 
 
     function append(char) {
