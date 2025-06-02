@@ -81,7 +81,15 @@
     opacity: 0;
   }
 }
+const clickSound = new Audio('button-click(chosic.com).mp3');
+clickSound.volume = 0.5;
 
+function playClick() {
+  clickSound.currentTime = 0;
+  clickSound.play();
+}
+
+    
   </style>
 </head>
 <body>
@@ -125,6 +133,18 @@
   display.scrollLeft = display.scrollWidth;
 }
 
+function formatWithCommas(numStr) {
+  let parts = numStr.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+}
+
+function updateDisplay() {
+  let cleanExpression = expression.replace(/<span class="cursor">\|<\/span>/g, '');
+  let toDisplay = formatWithCommas(cleanExpression) || '0';
+  display.innerHTML = toDisplay + '<span class="cursor">|</span>';
+  display.scrollLeft = display.scrollWidth;
+}
 
 
     function append(char) {
