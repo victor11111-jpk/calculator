@@ -112,7 +112,10 @@
 
   <script>
     const display = document.getElementById("display");
-const clickSound = new Audio("https://github.com/victor11111-jpk/audio/raw/main/click.mp3");
+    
+const clickSound = new Audio("data:audio/mp3;base64,//uQxAAADh...<rest_of_base64_data>...");
+
+   
     function playClick() {
       clickSound.currentTime = 0;
       clickSound.play();
