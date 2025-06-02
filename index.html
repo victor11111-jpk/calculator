@@ -2,434 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iOS‐Style Calculator (with + Button)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>iOS Style Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* ─── Reset & Base ───────────────────────────────────────────────── */
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
+      background-color: #000;
+      color: #fff;
+      font-family: 'SF Pro Display', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-                   Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      color: white;
-      user-select: none;
+      height: 100vh;
     }
 
-    /* ─── Calculator Container ───────────────────────────────────────── */
-    #calculator {
-      background: #1c1c1e;
+    .calculator {
+      width: 320px;
+      background-color: #1C1C1E;
       border-radius: 40px;
-      width: 360px;
-      padding: 30px 20px 40px;
-      box-shadow:
-        0 20px 30px rgba(0,0,0,0.8),
-        inset 0 1px 0 rgba(255,255,255,0.05);
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    /* ─── Display Area ───────────────────────────────────────────────── */
-    #display {
-      font-size: 4rem;
-      font-weight: 250;
+    .display {
+      background-color: transparent;
+      color: white;
+      font-size: 48px;
       text-align: right;
-      height: 78px;
-      line-height: 70px;
-      padding: 2 10px;
-      background: transparent; /* plain—no box */
-      margin-bottom: 7px;
-      overflow-x: auto;
-      white-space: nowrap;
+      border: none;
+      width: 100%;
+      margin-bottom: 20px;
+      padding-right: 10px;
+      height: 60px;
     }
 
-    /* ─── Buttons Grid ───────────────────────────────────────────────── */
     .buttons {
       display: grid;
-      grid-template-columns: repeat(4, 70px);
-      grid-auto-rows: 60px;
-      gap: 15px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
-    .buttons button {
-      border: none;
+
+    button {
+      font-size: 24px;
+      padding: 20px;
       border-radius: 50%;
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: white;
-      background: #2c2c2e;
-      box-shadow:
-        0 4px 0 #111,
-        inset 0 2px 0 rgba(255,255,255,0.1);
+      border: none;
       cursor: pointer;
-      transition: background 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-    }
-    .buttons button:active {
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-      transform: translateY(2px);
+      transition: 0.2s;
     }
 
-    /* ─── Function Buttons (AC, ±, %) ───────────────────────────────── */
-    .buttons button.function {
-      background: #505050;
-      color: #fff;
-    }
-    .buttons button.function:active {
-      background: #3a3a3c;
-    }
-
-    /* ─── Operator Buttons (÷ × − + =) ───────────────────────────────── */
-    .buttons button.operator {
-      background: #ff9500;
-      color: black;
-      box-shadow:
-        0 4px 0 #b36f00,
-        inset 0 2px 0 rgba(255,255,255,0.4);
-    }
-    .buttons button.operator:active {
-      background: #cc7a00;
-      box-shadow: inset 0 3px 7px rgba(0,0,0,0.6);
+    .function {
+      background-color: #A5A5A5;
       color: black;
     }
 
-    /* ─── Zero Button Spanning 2 Columns ─────────────────────────────── */
-    .buttons button.zero {
+    .operator {
+      background-color: #FF9500;
+      color: white;
+    }
+
+    .number {
+      background-color: #333;
+      color: white;
+    }
+
+    .zero {
       grid-column: span 2;
       border-radius: 40px;
-      justify-content: flex-start;
-      padding-left: 30px;
-      font-size: 1.7rem;
-    }
-
-    /* ─── Memory Buttons Row (bottom) ───────────────────────────────── */
-    #memory-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px; /* now sits below the keypad */
-    }
-    #memory-row button {
-      background: #505050;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      width: 100px;
-      height: 36px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      box-shadow: 0 2px 0 #111, inset 0 1px 0 rgba(255,255,255,0.1);
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    #memory-row button:active {
-      background: #3a3a3c;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-    }
-
-    /* ─── Responsive for Smaller Viewports ───────────────────────────── */
-    @media (max-width: 400px) {
-      #calculator {
-        width: 320px;
-        padding: 25px 15px 35px;
-      }
-      #memory-row button {
-        width: 90px;
-        height: 32px;
-        font-size: 0.8rem;
-      }
-      .buttons {
-        grid-template-columns: repeat(4, 70px);
-        grid-auto-rows: 70px;
-        gap: 10px;
-      }
-      .buttons button {
-        font-size: 1.5rem;
-      }
-      #display {
-        font-size: 3rem;
-        height: 70px;
-        line-height: 70px;
-      }
-      .buttons button.zero {
-        grid-column: span 2;
-        border-radius: 35px;
-        padding-left: 25px;
-        font-size: 1.5rem;
-      }
+      text-align: left;
+      padding-left: 32px;
     }
   </style>
 </head>
 <body>
-  <div id="calculator" role="region" aria-label="Calculator">
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled />
 
-    <!-- Plain Display Area -->
-    <div id="display" aria-live="polite" aria-atomic="true">0</div>
-
-    <!-- Main Buttons Grid -->
     <div class="buttons">
-      <!-- Row 1 -->
-      <button class="function" id="clear" aria-label="Clear">AC</button>
-      <button class="function" id="plusminus" aria-label="Plus Minus">±</button>
-      <button class="function" id="percent" aria-label="Percent">%</button>
-      <button class="operator" data-op="/">÷</button>
-      <
-      <!-- Row 2 -->
-      <button data-num="7">7</button>
-      <button data-num="8">8</button>
-      <button data-num="9">9</button>
-      <button class="operator" data-op="*">×</button>
+      <button class="function" id="clear">AC</button>
+      <button class="function" id="cancel">C</button>
+      <button class="function" data-value="%">%</button>
+      <button class="operator" data-value="/">÷</button>
 
-      <!-- Row 3 -->
-      <button data-num="4">4</button>
-      <button data-num="5">5</button>
-      <button data-num="6">6</button>
-      <button class="operator" data-op="-">−</button>
+      <button class="number" data-value="7">7</button>
+      <button class="number" data-value="8">8</button>
+      <button class="number" data-value="9">9</button>
+      <button class="operator" data-value="*">×</button>
 
-      <!-- Row 4 (includes +) -->
-      <button data-num="1">1</button>
-      <button data-num="2">2</button>
-      <button data-num="3">3</button>
-      <button class="operator" data-op="+">+</button>
+      <button class="number" data-value="4">4</button>
+      <button class="number" data-value="5">5</button>
+      <button class="number" data-value="6">6</button>
+      <button class="operator" data-value="-">−</button>
 
-      <!-- Row 5 (0 spans two columns, then . and =) -->
-      <button class="zero" data-num="0">0</button>
-      <button data-num=".">.</button>
-      <button class="operator" id="equals" data-op="=">=</button>
+      <button class="number" data-value="1">1</button>
+      <button class="number" data-value="2">2</button>
+      <button class="number" data-value="3">3</button>
+      <button class="operator" data-value="+">+</button>
+
+      <button class="number zero" data-value="0">0</button>
+      <button class="number" data-value=".">.</button>
+      <button class="operator" id="equals">=</button>
     </div>
-      <botton class="function" id=">C</button>
-        
-    <!-- Memory Row (now at bottom) -->
-    <div id="memory-row">
-      <button id="mem-add" aria-label="Memory Add">M+</button>
-      <button id="mem-recall" aria-label="Memory Recall">MR</button>
-      <button id="mem-clear" aria-label="Memory Clear">MC</button>
-    </div>
-
   </div>
 
   <script>
-    (function() {
-      const display = document.getElementById('display');
-      const buttons = document.querySelectorAll('.buttons button');
-      const memAddBtn = document.getElementById('mem-add');
-      const memRecallBtn = document.getElementById('mem-recall');
-      const memClearBtn = document.getElementById('mem-clear');
-      const memCancleBtn = document.getElementById("cancel").addEventListener("click", () => {
-  display.value = display.value.slice(0, -1);
-});
-      let current = '0';
-      let previous = null;
-      let operator = null;
-      let waitForNewNumber = false;
-      let memory = 0;
+    const display = document.getElementById("display");
 
-      function updateDisplay() {
-        display.textContent = current;
+    const clickSound = new Audio("https://cdn.jsdelivr.net/gh/jwilsson/misc@main/sounds/iphone-click.mp3");
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    document.querySelectorAll("[data-value]").forEach(button => {
+      button.addEventListener("click", () => {
+        playClick();
+        display.value += button.getAttribute("data-value");
+      });
+    });
+
+    document.getElementById("clear").addEventListener("click", () => {
+      playClick();
+      display.value = "";
+    });
+
+    document.getElementById("cancel").addEventListener("click", () => {
+      playClick();
+      display.value = display.value.slice(0, -1);
+    });
+
+    document.getElementById("equals").addEventListener("click", () => {
+      playClick();
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = "Error";
       }
-
-      function performCalculation(a, b, op) {
-        a = parseFloat(a);
-        b = parseFloat(b);
-        switch(op) {
-          case '+': return a + b;
-          case '-': return a - b;
-          case '*': return a * b;
-          case '/': return b === 0 ? 'Error' : a / b;
-          default: return b;
-        }
-      }
-
-      // ─── Button Click Handling ─────────────────────────────────────────
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const isNumber = btn.hasAttribute('data-num');
-          const isOperator = btn.classList.contains('operator');
-          const id = btn.id;
-
-          // ─── Clear (AC) ─────────────────────────────────
-          if (id === 'clear') {
-            current = '0';
-            previous = null;
-            operator = null;
-            waitForNewNumber = false;
-            updateDisplay();
-            return;
-          }
-
-          // ─── Plus/Minus (±) ─────────────────────────────
-          if (id === 'plusminus') {
-            if (current !== '0' && current !== 'Error') {
-              current = (current.charAt(0) === '-') 
-                        ? current.slice(1)
-                        : '-' + current;
-              updateDisplay();
-            }
-            return;
-          }
-
-          // ─── Percent (%) ────────────────────────────────
-          if (id === 'percent') {
-            if (current !== 'Error') {
-              current = (parseFloat(current) / 100).toString();
-              updateDisplay();
-            }
-            return;
-          }
-
-          // ─── Equals (=) ─────────────────────────────────
-          if (id === 'equals') {
-            if (operator && previous !== null && !waitForNewNumber) {
-              current = performCalculation(previous, current, operator).toString();
-              if (current === 'Error') {
-                display.textContent = 'Error';
-                current = '0';
-              }
-              operator = null;
-              previous = null;
-              waitForNewNumber = true;
-              updateDisplay();
-            }
-            return;
-          }
-
-          // ─── Operator (÷ × − +) ─────────────────────────
-          if (isOperator) {
-            const op = btn.getAttribute('data-op');
-            if (operator && !waitForNewNumber) {
-              current = performCalculation(previous, current, operator).toString();
-              if (current === 'Error') {
-                display.textContent = 'Error';
-                current = '0';
-                operator = null;
-                previous = null;
-                waitForNewNumber = false;
-                return;
-              }
-              updateDisplay();
-            }
-            operator = op;
-            previous = current;
-            waitForNewNumber = true;
-            return;
-          }
-
-          // ─── Number or Decimal Point ─────────────────────
-          if (isNumber) {
-            const val = btn.getAttribute('data-num');
-            if (waitForNewNumber) {
-              current = val === '.' ? '0.' : val;
-              waitForNewNumber = false;
-              updateDisplay();
-              return;
-            }
-            if (val === '.') {
-              if (!current.includes('.')) {
-                current += '.';
-                updateDisplay();
-              }
-              return;
-            }
-            if (current === '0') {
-              current = val;
-            } else {
-              current += val;
-            }
-            updateDisplay();
-          }
-        });
-      });
-
-      // ─── Memory Button Logic ───────────────────────────────────────────
-      memAddBtn.addEventListener('click', () => {
-        if (!isNaN(parseFloat(current))) {
-          memory = parseFloat(current);
-          alert("Saved to memory: " + memory);
-        }
-      });
-
-      memRecallBtn.addEventListener('click', () => {
-        current = memory.toString();
-        updateDisplay();
-      });
-
-      memClearBtn.addEventListener('click', () => {
-        memory = 0;
-        alert("Memory cleared");
-      });
-
-      // ─── Keyboard Support ──────────────────────────────────────────────
-      document.addEventListener('keydown', (e) => {
-        const key = e.key;
-        if (/^[0-9]$/.test(key)) {
-          // number key
-          if (waitForNewNumber) {
-            current = key;
-            waitForNewNumber = false;
-          } else {
-            current = (current === '0') ? key : (current + key);
-          }
-          updateDisplay();
-        }
-        else if (key === '.') {
-          if (!current.includes('.')) {
-            current += '.';
-            updateDisplay();
-          }
-        }
-        else if (key === '+' || key === '-' || key === '*' || key === '/') {
-          // operator key
-          if (operator && !waitForNewNumber) {
-            current = performCalculation(previous, current, operator).toString();
-            updateDisplay();
-          }
-          operator = key;
-          previous = current;
-          waitForNewNumber = true;
-        }
-        else if (key === 'Enter' || key === '=') {
-          // equals key
-          e.preventDefault();
-          if (operator && previous !== null && !waitForNewNumber) {
-            current = performCalculation(previous, current, operator).toString();
-            if (current === 'Error') {
-              display.textContent = 'Error';
-              current = '0';
-            }
-            operator = null;
-            previous = null;
-            waitForNewNumber = true;
-            updateDisplay();
-          }
-        }
-        else if (key === 'Backspace') {
-          // delete last digit
-          if (!waitForNewNumber && current !== '0') {
-            current = current.slice(0, -1);
-            if (current === '' || current === '-') current = '0';
-            updateDisplay();
-          }
-        }
-        else if (key === 'Escape') {
-          // clear
-          current = '0';
-          previous = null;
-          operator = null;
-          waitForNewNumber = false;
-          updateDisplay();
-        }
-      });
-
-      // Initial render
-      updateDisplay();
-    })();
+    });
   </script>
 </body>
 </html>
